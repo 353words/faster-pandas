@@ -1,0 +1,8 @@
+In [1]: import pandas as pd
+In [2]: s = pd.Series(range(10_000))
+In [3]: %timeit max(s)
+727 µs ± 4.21 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+In [4]: %timeit s.max()
+22.3 µs ± 89 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+In [5]: %timeit s.values.max()
+8.59 µs ± 22.8 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)

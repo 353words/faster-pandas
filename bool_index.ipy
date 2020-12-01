@@ -1,0 +1,13 @@
+In [1]: import sqlite3
+In [2]: import pandas as pd
+In [3]: conn = sqlite3.connect('logs.db', detect_types=sqlite3.PARSE_DECLTYPES)
+In [4]: df = pd.read_sql('SELECT * FROM logs', conn)
+In [5]: %%timeit
+   ...: total = 0
+   ...: for _, row in df.iterrows():
+   ...:     if row['status_code'] >= 400:
+   ...:         total += 1
+   ...: 
+754 ms ± 3.42 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+In [6]: %timeit len(df[df['status_code'] >= 400])
+342 µs ± 2.9 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)

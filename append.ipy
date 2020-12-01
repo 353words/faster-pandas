@@ -1,0 +1,13 @@
+In [1]: import lzma
+In [2]: with lzma.open('log.txt.xz', 'rt') as fp:
+   ...:     lines = list(fp)
+   ...: 
+In [3]: %run parse_log.py
+In [4]: %%timeit
+   ...: df = pd.DataFrame()
+   ...: for line in lines:
+   ...:     df = df.append(parse_line(line), ignore_index=True)
+   ...: 
+2.45 s ± 9.7 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+In [5]: %timeit df = pd.DataFrame.from_records(parse_line(line) for line in lines)
+14.8 ms ± 116 µs per loop (mean ± std. dev. of 7 runs, 100 loops each)
