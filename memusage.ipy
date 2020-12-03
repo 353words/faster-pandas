@@ -1,0 +1,64 @@
+In [1]: from pathlib import Path
+In [2]: csv_file = 'taxi-01-2020-sample.csv.xz'
+In [3]: mb = 1<<20
+In [4]: Path(csv_file).stat().st_size / mb
+Out[4]: 11.03564453125
+In [5]: import pandas as pd
+In [6]: df = pd.read_csv(csv_file)
+In [7]: df.memory_usage(deep=True)/mb
+Out[7]:
+Index                     0.000122
+VendorID                  7.629395
+tpep_pickup_datetime     72.479248
+tpep_dropoff_datetime    72.479248
+passenger_count           7.629395
+trip_distance             7.629395
+RatecodeID                7.629395
+store_and_fwd_flag       55.313110
+PULocationID              7.629395
+DOLocationID              7.629395
+payment_type              7.629395
+fare_amount               7.629395
+extra                     7.629395
+mta_tax                   7.629395
+tip_amount                7.629395
+tolls_amount              7.629395
+improvement_surcharge     7.629395
+total_amount              7.629395
+congestion_surcharge      7.629395
+In [8]: df.memory_usage(deep=True).sum()/mb
+Out[8]: 314.712646484375
+
+# ---
+
+In [1]: import pandas as pd
+In [2]: df = pd.read_csv(csv_file, usecols=['tpep_pickup_datetime', 'total_amount'])
+In [3]: df.memory_usage(deep=True)/mb
+In [3]: df.memory_usage(deep=True).sum()/mb
+Out[3]: 
+80.1087646484375
+
+# ---
+
+In [1]: import pandas as pd
+In [2]: df = pd.read_csv(csv_file, usecols=['VendorID'])
+In [2]: df.memory_usage(deep=True).sum()/mb
+Out[2]: 7.6295166015625
+In [3]: df['VendorID'].unique()
+Out[3]: array([2, 1])
+In [4]: df = pd.read_csv(csv_file, usecols=['VendorID'], dtype={'VendorID': 'int8'})
+In [5]: df.memory_usage(deep=True).sum()/mb
+Out[5]: 0.95379638671875
+
+# ---
+
+In [1]: import pandas as pd
+In [2]: from collections import Counter
+In [3]: dfs = pd.read_csv(csv_file, usecols=['VendorID', 'total_amount'], chunksize=10_000)
+In [4]: revenue = Counter()
+In [5]: for df in dfs:
+    ...:     by_vendor = df.groupby('VendorID')['total_amount'].sum()
+    ...:     revenue.update(by_vendor.to_dict())
+    ...: 
+In [6]: revenue
+Out[6]: Counter({1: 5978392.140000124, 2: 12491742.88000057})
