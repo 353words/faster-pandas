@@ -2,7 +2,7 @@
 
 In the [previous post](TODO) we discussed how you can make Pandas code run faster. In this blog post we'll see how you can reduce its memory footprint.
 
-Before you begin, the easiest way is ... to get a machine with more memory. This sounds obvious but most people tend to ignore it. You can least a machine with several *terabytes* of memory from most of the big cloud providers. Tell me your data doesn't fit in a couple of terabytes of memory!
+Before you begin, the easiest way is ... to get a machine with more memory. This sounds obvious but most people tend to ignore it. You can lease a machine with several *terabytes* of memory from most of the big cloud providers. Tell me your data doesn't fit in a couple of terabytes of memory!
 
 The reason we'd like to reduce Pandas memory footprint is to be able to stay in the single machine boundary. Moving to processing data on multiple machines is a long and painful project.
 
@@ -54,9 +54,9 @@ Listing 1 shows how to measure memory using `memory_usage`.
 * `[7]` We use `memory_usage` to see how much each row 
 * `[8]` We measure the total memory consumed
 
-We went from 11MB on compressed on disk to 314MB in memory!
+We went from 11MB compressed on disk to 314MB in memory!
 
-### Use Only the Data You Need
+### Load Only the Data You Need
 
 It seems trivial, but you should load only the data you need. Let's say we'd like to measure the average daily revenue. We need only the `tpep_pickup_datetime` and the `total_amount` columns.
 
@@ -109,7 +109,7 @@ In [5]: df.memory_usage(deep=True).sum()/mb
 Out[5]: 0.95379638671875
 ```
 
-Listing 5 shows the memory consumption when loading the `VendorID` as `int8` dtype. We down to 0.9MB from the original 7.6MB.
+Listing 5 shows the memory consumption when loading the `VendorID` as `int8` dtype. We went down to 0.9MB from the original 7.6MB.
 
 Pandas also has a [categorial](https://pandas.pydata.org/pandas-docs/stable/user_guide/categorical.html) data type that can help reduce memory in string data that repeats itself a lot.
 
@@ -142,4 +142,4 @@ Listing 6 shows how to iterate over the data in chunks.
 
 Pandas has several utilities that can reduce memory consumption significantly. This will allow you to stay in a single machine, which in turn will simplify your data analysis workflow.
 
-If you want to learn more, you can have a look at the [Enhancing Performance](https://pandas.pydata.org/pandas-docs/stable/user_guide/enhancingperf.html) section of the pandas documentation. You can also try out my [Faster Pandas](https://www.linkedin.com/learning/faster-pandas/) online course.
+If you want to learn more, you can have a look at the [Enhancing Performance](https://pandas.pydata.org/pandas-docs/stable/user_guide/enhancingperf.html) section of the pandas documentation. You can also check out my [Faster Pandas](https://www.linkedin.com/learning/faster-pandas/) online course which has more tips & tricks.
