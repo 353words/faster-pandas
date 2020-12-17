@@ -3,8 +3,8 @@ In [2]: conn = sqlite3.connect('logs.db', detect_types=sqlite3.PARSE_DECLTYPES)
 In [3]: import pandas as pd
 In [4]: df = pd.read_sql('SELECT * FROM logs', conn)
 In [5]: df = pd.concat([df]*1000)
-In [6]: f'{len(df):,}'
-Out[6]: '10,000,000'
+In [6]: f'{len(df):,} rows'
+Out[6]: '10,000,000 rows'
 In [7]: %timeit df[(df['method'] == 'GET') & (df['status_code'] >= 400)]
 471 ms ± 3.1 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
 In [8]: %timeit df.query('method == "GET" & status_code >= 400')
